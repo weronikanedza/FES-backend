@@ -3,27 +3,27 @@ package com.demo.fes.data;
 import com.demo.fes.entity.User;
 import com.demo.fes.entity.UserData;
 import com.demo.fes.exception.OperationException;
-import com.demo.fes.service.IUserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import com.demo.fes.service.RegistrationService;
 
 @Component
 public class DataLoader implements ApplicationRunner {
     private static String DEFAULT_ROLE = "USER";
     private static String ADMIN_ROLE = "ADMIN";
 
-    private IUserDataService userDataService ;
+    private RegistrationService registartionService ;
 
     @Autowired
-    public DataLoader(IUserDataService userDataService){
-        this.userDataService = userDataService;
+    public DataLoader(RegistrationService registartionService){
+        this.registartionService = registartionService;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        createExampleData();
+     //   createExampleData();
     }
 
     private void createExampleData() throws OperationException {
@@ -36,7 +36,7 @@ public class DataLoader implements ApplicationRunner {
                         .user(createUsersLoginData("a@b.com", "user", DEFAULT_ROLE))
                         .build();
 
-        userDataService.save(user);
+        registartionService.registerUser(user);
 
         UserData admin =
                 UserData.builder().firstName("Jarek")
@@ -47,7 +47,7 @@ public class DataLoader implements ApplicationRunner {
                         .user(createUsersLoginData("jarek@b.com", "admin", ADMIN_ROLE))
                         .build();
 
-        userDataService.save(admin);
+        registartionService.registerUser(admin);
     }
 
     private User createUsersLoginData(String email, String password, String role) {

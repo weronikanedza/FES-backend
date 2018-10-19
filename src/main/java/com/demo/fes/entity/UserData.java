@@ -4,6 +4,7 @@ import com.demo.fes.request.RegisterUserDataRq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserData {
     private static final String DEFAULT_ROLE = "USER";
 
@@ -39,7 +41,7 @@ public class UserData {
     @JoinColumn(name = "id_user")
     private User user;
 
-    private User createUser(RegisterUserDataRq registerUserRq){
+    private static User createUser(RegisterUserDataRq registerUserRq){
         return User.builder()
                 .email(registerUserRq.getEmail())
                 .password(registerUserRq.getPassword())
@@ -47,7 +49,7 @@ public class UserData {
                 .enabled(false)
                 .build();
     }
-    public UserData convertFromJson(RegisterUserDataRq registerUserRq) {
+    public static UserData convertFromJson(RegisterUserDataRq registerUserRq) {
         if (registerUserRq == null)
             return null;
 
@@ -58,7 +60,6 @@ public class UserData {
                 .city(registerUserRq.getCity())
                 .country(registerUserRq.getCountry())
                 .user(createUser(registerUserRq))
-
                 .build();
     }
 }
