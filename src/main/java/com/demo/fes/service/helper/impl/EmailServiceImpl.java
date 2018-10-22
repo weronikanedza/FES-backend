@@ -47,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
         String recipientAddress = user.getEmail();
         String subject = "Registration confirmation";
         final String confirmationUrl
-                = contextPath + "/registration/confirm.html?token=" + token;
+                = contextPath + ":3000/registration/confirm?token=" + token;
         final String message = "\nTo enable your account click in the link:\n" +
                 "<a href=" + confirmationUrl + ">Account confirmation</a>";
 

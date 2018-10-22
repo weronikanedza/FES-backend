@@ -11,17 +11,17 @@ import java.text.MessageFormat;
 public class JSONCreatorServiceImpl implements JSONCreatorService {
 
     @Override
-    public String constructRegistrationResponse(final String token, final String email) {
+    public String constructRegistrationResponse(String token, String email) {
 
         return createJsonForRegistrationProcess(token, email, ApiMessages.REGISTRATION_TOKEN_SEND);
     }
 
     @Override
-    public String constructResetTokenResponse(final String token, final String email) {
+    public String constructResetTokenResponse(String token,  String email) {
         return createJsonForRegistrationProcess(token, email, ApiMessages.RESET_TOKEN_SEND);
     }
 
-    private String createJsonForRegistrationProcess(final String token, final String email, final String message) {
+    private String createJsonForRegistrationProcess( String token,  String email,  String message) {
         return Json.createObjectBuilder()
                 .add("token", token)
                 .add("email", email)
