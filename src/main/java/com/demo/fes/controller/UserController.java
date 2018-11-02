@@ -4,6 +4,7 @@ import com.demo.fes.exception.OperationException;
 import com.demo.fes.request.LoginRq;
 import com.demo.fes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/login")
-    public String login(@RequestBody LoginRq loginRq) throws OperationException {
-       return userService.loginUser(loginRq);
+    public ResponseEntity login(@RequestBody LoginRq loginRq) throws OperationException {
+       return  ResponseEntity.ok(userService.loginUser(loginRq));
     }
 }

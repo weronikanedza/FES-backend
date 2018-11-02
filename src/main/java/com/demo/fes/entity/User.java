@@ -6,13 +6,15 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
-@Table(name="User")
+@Table(name="user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +35,15 @@ public class User {
 
     private String role;
 
-    @OneToOne(mappedBy = "user",cascade=CascadeType.ALL)
-    private UserData dataAboutUser;
-
     public static EntityManager entityManager;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_file", joinColumns = {
+            @JoinColumn(name = "user_id", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "file_id",
+                    nullable = false, updatable = false) })
+    private Set<File> files = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -51,4 +58,6 @@ public class User {
     public int hashCode() {
         return Objects.hash(email, password);
     }
+
+
 }
