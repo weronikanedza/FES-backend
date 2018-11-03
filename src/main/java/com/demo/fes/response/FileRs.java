@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -16,10 +15,13 @@ import java.util.Set;
 @Builder
 public class FileRs implements Serializable {
     private Long id;
-    private Set<UserRs> users;
     private String fileName;
     private String filePath;
     private String fileType;
+    private String date;
+    private String size;
+    private Integer numberOfUsers;
+    private byte[] data;
 }
 
 

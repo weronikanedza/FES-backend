@@ -1,5 +1,6 @@
 package com.demo.fes.entity;
 
+import com.demo.fes.response.FileRs;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +36,24 @@ public class File {
 
     private String size;
 
+    private String contentType;
+
+    @Lob
+    private byte[] data;
 
     @ManyToMany(mappedBy = "files")
     private Set<User> users = new HashSet<>();
+
+    public static FileRs convertTo(File file){
+        return FileRs.builder()
+                .id(file.getId())
+                .fileName(file.getFileName())
+                .filePath(file.getFilePath())
+                .fileType(file.getFileType())
+                .date(file.getDate())
+                .numberOfUsers(file.getUsers().size())
+                .size(file.getSize())
+                .data(file.getData())
+                .build();
+    }
 }
