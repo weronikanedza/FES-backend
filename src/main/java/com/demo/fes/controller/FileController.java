@@ -37,7 +37,7 @@ public class FileController {
     }
 
     @RequestMapping(path = "/getAllFiles")
-    public ResponseEntity<List<FileRs>> uploadFile(@RequestBody String id) throws OperationException {
+    public ResponseEntity<List<FileRs>> uploadFile(@RequestBody String id)  {
         id = id.replace("=", "");
         Set<File> files = fileService.getAllFiles(Long.valueOf(id));
 
@@ -47,7 +47,7 @@ public class FileController {
     }
 
     @RequestMapping(path = "/downloadFile")
-    public ResponseEntity<byte[]> downloadFile(@RequestBody String id) throws OperationException {
+    public ResponseEntity<byte[]> downloadFile(@RequestBody String id)  {
         id = id.replace("=", "");
         File file=fileService.getFileById(Long.valueOf(id)).get();
 
@@ -57,5 +57,11 @@ public class FileController {
         header.add("Content-Disposition", "attachment; filename=" + file.getFileName());
         header.set("Content-Disposition", "attachment; filename=" + file.getFileName());
         return new ResponseEntity<>(file.getData(), header, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/deleteFile")
+    public String deleteFile(@RequestBody String id) {
+        fileService.deleteFile(Long.valueOf(id.replace("=", "")));
+        return null;
     }
 }

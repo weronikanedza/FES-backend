@@ -1,5 +1,6 @@
 package com.demo.fes.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +39,8 @@ public class User {
     public static EntityManager entityManager;
 
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY )
+    @JsonIgnore
     @JoinTable(name = "user_file", joinColumns = {
             @JoinColumn(name = "user_id", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "file_id",

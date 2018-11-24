@@ -12,4 +12,5 @@ public interface FileService {
     File uploadFile(MultipartFile file, String size, Long id) throws OperationException, IOException;
     Set<File> getAllFiles(Long id);
     Optional<File> getFileById(Long id);
+    String deleteFile(Long id);
 }

@@ -62,6 +62,19 @@ public class FileServiceImpl implements FileService {
         return fileRepository.findById(id);
     }
 
+    @Override
+    public String deleteFile(Long id) {
+        File file = fileRepository.findById(id).orElse(null);
+        Set<User> users = file.getUsers();
+
+      for(User user : users){
+          user.getFiles().remove(file);
+      }
+
+      fileRepository.deleteById(id);
+        return null;
+    }
+
     private String getFileType(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         return fileName.substring(fileName.lastIndexOf(".") + 1).trim();
@@ -82,9 +95,9 @@ public class FileServiceImpl implements FileService {
         || fileType.equals("png"))){
             throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.NOT_ACCEPTABLE_FILE_FORMAT);
         }
-        if(isFileWithGivenName(files,fileName)){
-            throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.FILE_EXISTS);
-        }
+//        if(isFileWithGivenName(files,fileName)){
+//            throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.FILE_EXISTS);
+//        }
     }
 
     private boolean isFileWithGivenName(Set<File> files, String fileName){

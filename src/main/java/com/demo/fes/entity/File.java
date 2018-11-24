@@ -1,6 +1,7 @@
 package com.demo.fes.entity;
 
 import com.demo.fes.response.FileRs;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,7 +42,8 @@ public class File {
     @Lob
     private byte[] data;
 
-    @ManyToMany(mappedBy = "files")
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "files")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public static FileRs convertTo(File file){
