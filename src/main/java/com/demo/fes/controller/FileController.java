@@ -37,9 +37,30 @@ public class FileController {
     }
 
     @RequestMapping(path = "/getAllFiles")
-    public ResponseEntity<List<FileRs>> uploadFile(@RequestBody String id)  {
+    public ResponseEntity<List<FileRs>> getAllFiles(@RequestBody String id)  {
         id = id.replace("=", "");
         Set<File> files = fileService.getAllFiles(Long.valueOf(id));
+
+        return ResponseEntity.ok(files.stream()
+                .map(File::convertTo)
+                .collect(Collectors.toList()));
+    }
+
+
+    @RequestMapping(path = "/getAllFilesAddedByUser")
+    public ResponseEntity<List<FileRs>> getAllUserFiles(@RequestBody String id)  {
+        id = id.replace("=", "");
+        Set<File> files = fileService.getAllUserFiles(Long.valueOf(id));
+
+        return ResponseEntity.ok(files.stream()
+                .map(File::convertTo)
+                .collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/getAllSharedFiles")
+    public ResponseEntity<List<FileRs>> getAllSharedFiles(@RequestBody String id)  {
+        id = id.replace("=", "");
+        Set<File> files = fileService.getAllSharedFiles(Long.valueOf(id));
 
         return ResponseEntity.ok(files.stream()
                 .map(File::convertTo)
@@ -60,8 +81,17 @@ public class FileController {
     }
 
     @RequestMapping(path = "/deleteFile")
-    public String deleteFile(@RequestBody String id) {
-        fileService.deleteFile(Long.valueOf(id.replace("=", "")));
+    public String deleteFile(@RequestParam("fileId") String fileId,@RequestParam("userId") String userId) {
+        Long fileIdConv = Long.valueOf(fileId);
+        Long userIdConv = Long.valueOf(userId);
+        fileService.deleteFile(fileIdConv,userIdConv);
+        return null;
+    }
+
+    @RequestMapping(path = "/shareFile")
+    public String shareFile(@RequestParam("id") String id,@RequestParam("email") String email) throws OperationException {
+        Long fileId = Long.valueOf(id);
+        fileService.shareFile(fileId,email);
         return null;
     }
 }

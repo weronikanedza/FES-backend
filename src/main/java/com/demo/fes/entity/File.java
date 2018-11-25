@@ -39,6 +39,8 @@ public class File {
 
     private String contentType;
 
+    private Long adderId;
+
     @Lob
     private byte[] data;
 
