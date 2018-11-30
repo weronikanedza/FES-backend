@@ -6,6 +6,7 @@ import com.demo.fes.entity.UserData;
 import com.demo.fes.exception.OperationException;
 import com.demo.fes.repository.UserDataRepository;
 import com.demo.fes.repository.UserRepository;
+import com.demo.fes.request.EditUserDataDto;
 import com.demo.fes.request.LoginRq;
 import com.demo.fes.response.UserRs;
 import com.demo.fes.service.UserService;
@@ -46,5 +47,33 @@ public class UserServiceImpl extends AbstractGenericService<User, Long> implemen
 
     }
 
+    @Override
+    public void editUser(EditUserDataDto editUserDataDto) {
+        User user = userRepository.getOne(Long.valueOf(editUserDataDto.getId()));
+        UserData userData= userDataRepository.findByUser(user);
 
+        user.setEmail(editUserDataDto.getEmail());
+        userData.setCity(editUserDataDto.getCity());
+        userData.setCountry(editUserDataDto.getCountry());
+        userData.setDateOfBirth(editUserDataDto.getDate());
+        userData.setFirstName(editUserDataDto.getFirstName());
+        userData.setLastName(editUserDataDto.getLastName());
+
+        userDataRepository.save(userData);
+    }
+
+    @Override
+    public EditUserDataDto getUser(Long id) {
+        User user = userRepository.getOne(id);
+        UserData userData = userDataRepository.findByUser(user);
+
+        return new EditUserDataDto().builder()
+                .id(id+"")
+                .city(userData.getCity())
+                .firstName(userData.getFirstName())
+                .lastName(userData.getLastName())
+                .country(userData.getCountry())
+                .date(userData.getDateOfBirth())
+                .email(user.getEmail()).build();
+    }
 }
