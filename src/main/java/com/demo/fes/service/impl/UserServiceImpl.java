@@ -6,6 +6,7 @@ import com.demo.fes.entity.UserData;
 import com.demo.fes.exception.OperationException;
 import com.demo.fes.repository.UserDataRepository;
 import com.demo.fes.repository.UserRepository;
+import com.demo.fes.request.ChangePasswordRq;
 import com.demo.fes.request.EditUserDataDto;
 import com.demo.fes.request.LoginRq;
 import com.demo.fes.response.UserRs;
@@ -75,5 +76,17 @@ public class UserServiceImpl extends AbstractGenericService<User, Long> implemen
                 .country(userData.getCountry())
                 .date(userData.getDateOfBirth())
                 .email(user.getEmail()).build();
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRq changePasswordRq) throws OperationException {
+        Long id = Long.valueOf(changePasswordRq.getId().replace("=",""));
+        User user = userRepository.getOne(id);
+        if(!user.getPassword().equals(changePasswordRq.getCurrentPassword())){
+            throw new OperationException(HttpStatus.NOT_ACCEPTABLE,ErrorMessages.WRONG_CURRENT_PASSWORD);
+        }
+
+        user.setPassword(changePasswordRq.getNewPassword());
+        userRepository.save(user);
     }
 }

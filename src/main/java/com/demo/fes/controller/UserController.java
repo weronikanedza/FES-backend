@@ -1,6 +1,7 @@
 package com.demo.fes.controller;
 
 import com.demo.fes.exception.OperationException;
+import com.demo.fes.request.ChangePasswordRq;
 import com.demo.fes.request.EditUserDataDto;
 import com.demo.fes.request.LoginRq;
 import com.demo.fes.service.UserService;
@@ -34,6 +35,12 @@ public class UserController {
     @RequestMapping(path = "/editUser")
     public ResponseEntity editUser(@RequestBody EditUserDataDto user)  {
         userService.editUser(user);
+        return  ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/changePassword")
+    public ResponseEntity changePassword(@RequestBody ChangePasswordRq changePasswordRq) throws OperationException {
+        userService.changePassword(changePasswordRq);
         return  ResponseEntity.ok(HttpStatus.OK);
     }
 }
