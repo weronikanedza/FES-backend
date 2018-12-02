@@ -11,4 +11,5 @@ public class ErrorMessages {
     public static final String USER_IS_NOT_IN_DB = "Użytkownik o podanym emailu nie istnieje w naszej bazie";
     public static final String FILE_IS_SHARED = "Plik już został udostępniony użytkownikowi o danym emailu";
     public static final String WRONG_CURRENT_PASSWORD = "Niepoprawne obecne hasło";
+    public static final String  EMAIL_NOT_FOUND = "Użytkownik o podanym emailu nie istnieje";
 }

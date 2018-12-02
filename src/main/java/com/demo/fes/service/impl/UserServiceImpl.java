@@ -11,6 +11,8 @@ import com.demo.fes.request.EditUserDataDto;
 import com.demo.fes.request.LoginRq;
 import com.demo.fes.response.UserRs;
 import com.demo.fes.service.UserService;
+import com.demo.fes.service.helper.EmailService;
+import com.demo.fes.service.helper.impl.PasswordGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,12 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl extends AbstractGenericService<User, Long> implements UserService {
     private UserRepository userRepository;
     private UserDataRepository userDataRepository;
+    private EmailService emailService;
 
-
-    public UserServiceImpl(UserRepository userRepository, UserDataRepository userDataRepository) {
+    public UserServiceImpl(EmailService emailService, UserRepository userRepository, UserDataRepository userDataRepository) {
         this.userRepository = userRepository;
         this.userDataRepository = userDataRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class UserServiceImpl extends AbstractGenericService<User, Long> implemen
     @Override
     public void editUser(EditUserDataDto editUserDataDto) {
         User user = userRepository.getOne(Long.valueOf(editUserDataDto.getId()));
-        UserData userData= userDataRepository.findByUser(user);
+        UserData userData = userDataRepository.findByUser(user);
 
         user.setEmail(editUserDataDto.getEmail());
         userData.setCity(editUserDataDto.getCity());
@@ -69,7 +72,7 @@ public class UserServiceImpl extends AbstractGenericService<User, Long> implemen
         UserData userData = userDataRepository.findByUser(user);
 
         return new EditUserDataDto().builder()
-                .id(id+"")
+                .id(id + "")
                 .city(userData.getCity())
                 .firstName(userData.getFirstName())
                 .lastName(userData.getLastName())
@@ -80,13 +83,24 @@ public class UserServiceImpl extends AbstractGenericService<User, Long> implemen
 
     @Override
     public void changePassword(ChangePasswordRq changePasswordRq) throws OperationException {
-        Long id = Long.valueOf(changePasswordRq.getId().replace("=",""));
+        Long id = Long.valueOf(changePasswordRq.getId().replace("=", ""));
         User user = userRepository.getOne(id);
-        if(!user.getPassword().equals(changePasswordRq.getCurrentPassword())){
-            throw new OperationException(HttpStatus.NOT_ACCEPTABLE,ErrorMessages.WRONG_CURRENT_PASSWORD);
+        if (!user.getPassword().equals(changePasswordRq.getCurrentPassword())) {
+            throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.WRONG_CURRENT_PASSWORD);
         }
 
         user.setPassword(changePasswordRq.getNewPassword());
         userRepository.save(user);
+    }
+
+    @Override
+    public void resetPassword(String email) throws OperationException {
+        User user = userRepository.findByEmail(email);
+        if(user == null)
+            throw new OperationException(HttpStatus.NOT_ACCEPTABLE,ErrorMessages.EMAIL_NOT_FOUND);
+        String newPassword = PasswordGenerator.generatePassword();
+        user.setPassword(newPassword);
+        userRepository.save(user);
+        emailService.sendSimpleMessage(user.getEmail(),"Reset hasła", "Twoje nowe hasło to : "+ newPassword);
     }
 }

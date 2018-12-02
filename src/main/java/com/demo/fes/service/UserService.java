@@ -13,4 +13,5 @@ public interface UserService {
     void editUser(EditUserDataDto editUserDataDto);
     EditUserDataDto getUser(Long id);
     void changePassword(ChangePasswordRq changePasswordRq) throws OperationException;
+    void resetPassword (String email) throws OperationException;
 }

@@ -43,4 +43,10 @@ public class UserController {
         userService.changePassword(changePasswordRq);
         return  ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @RequestMapping(path = "/resetPassword")
+    public ResponseEntity resetPassword(@RequestBody String email) throws OperationException {
+        userService.resetPassword(email.replace("%40","@").replace("=",""));
+        return  ResponseEntity.ok(HttpStatus.OK);
+    }
 }
