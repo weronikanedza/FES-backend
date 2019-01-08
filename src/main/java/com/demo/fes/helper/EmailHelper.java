@@ -10,7 +10,6 @@ import java.util.Properties;
 public class EmailHelper {
     @Bean
     public JavaMailSenderImpl mailSender() {
-
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
         javaMailSender.setProtocol("smtp");

@@ -27,7 +27,6 @@ public class FileServiceImpl implements FileService {
     private UserRepository userRepository;
     private FileRepository fileRepository;
     private static final String SEPARATOR = java.io.File.separator;
-    private static final String UPLOADED_FOLDER = "files" + SEPARATOR;
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
     private EmailService emailService;
 
@@ -121,7 +120,7 @@ public class FileServiceImpl implements FileService {
         file.getUsers().add(user);
         userRepository.save(user);
 
-        emailService.sendSimpleMessage(email,"Udostępniony plik","Został ci udostępniony plik : "+ file.getFileName());
+        emailService.sendSimpleMessage(email,"Udostępniony plik","Plik o nazwie \""+file.getFileName()+"\" został udostępniony.");
     }
 
 
@@ -130,24 +129,21 @@ public class FileServiceImpl implements FileService {
         return fileName.substring(fileName.lastIndexOf(".") + 1).trim();
     }
 
-    private void checkFile(MultipartFile file, Long id, String fileType) throws OperationException, IOException {
-        String fileName = file.getOriginalFilename();
+    private void checkFile(MultipartFile file, Long id, String fileType) throws OperationException {
+
         if (file.isEmpty())
             throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.EMPTY_FILE);
 
         Optional<User> user = userRepository.findById(id);
-        Set<File> files = user.get().getFiles();
 
         if (file.getSize() > 10485760) {
             throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.FILE_SIZE);
         }
         if (!(fileType.equals("pdf") || fileType.equals("txt") || fileType.equals("jpg") || fileType.equals("docx")
-                || fileType.equals("png"))) {
+                || fileType.equals("png") || fileType.equals("zip") || fileType.equals("mobi") )) {
             throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.NOT_ACCEPTABLE_FILE_FORMAT);
         }
-//        if(isFileWithGivenName(files,fileName)){
-//            throw new OperationException(HttpStatus.NOT_ACCEPTABLE, ErrorMessages.FILE_EXISTS);
-//        }
+
     }
 
     private boolean isFileWithGivenName(Set<File> files, String fileName) {
@@ -160,13 +156,11 @@ public class FileServiceImpl implements FileService {
 
         return com.demo.fes.entity.File.builder()
                 .fileName(fileName)
-                .filePath(UPLOADED_FOLDER + id + "_" + fileName)
                 .size(size)
                 .fileType(fileType)
                 .date(LocalDate.now().format(formatters))
                 .users(userSet)
                 .adderId(id)
-                .contentType(file.getContentType())
                 .data(file.getBytes())
                 .build();
     }

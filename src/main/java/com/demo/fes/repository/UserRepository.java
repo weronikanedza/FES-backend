@@ -1,11 +1,8 @@
 package com.demo.fes.repository;
 
 import com.demo.fes.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends GenericRepository<User,Long>{
-//    @Modifying
-//    @Query("update User set user.enabled = ?1 where user.id_user = ?2")
-//    void setEnabled(Boolean enabled, Long id);
-
+public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 }

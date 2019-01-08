@@ -28,16 +28,11 @@ public class File {
     private String fileName;
 
     @NotBlank
-    private String filePath;
-
-    @NotBlank
     private String fileType;
 
     private String date;
 
     private String size;
-
-    private String contentType;
 
     private Long adderId;
 
@@ -52,7 +47,6 @@ public class File {
         return FileRs.builder()
                 .id(file.getId())
                 .fileName(file.getFileName())
-                .filePath(file.getFilePath())
                 .fileType(file.getFileType())
                 .date(file.getDate())
                 .numberOfUsers(file.getUsers().size())

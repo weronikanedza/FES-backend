@@ -7,7 +7,6 @@ import com.demo.fes.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,7 +72,6 @@ public class FileController {
         File file=fileService.getFileById(Long.valueOf(id)).get();
 
         HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.valueOf(file.getContentType()));
         header.setContentLength(file.getData().length);
         header.add("Content-Disposition", "attachment; filename=" + file.getFileName());
         header.set("Content-Disposition", "attachment; filename=" + file.getFileName());

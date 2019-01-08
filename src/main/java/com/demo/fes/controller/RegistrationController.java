@@ -32,7 +32,6 @@ public class RegistrationController {
 
         VerificationToken vToken = registrationService.createVerificationToken(registered);
         return registrationService.sendRegistrationEmail(vToken, request);
-
     }
 
     @PostMapping(path = "/register/confirm")

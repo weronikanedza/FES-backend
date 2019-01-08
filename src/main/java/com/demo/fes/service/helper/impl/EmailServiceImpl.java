@@ -38,18 +38,18 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom(EMAIL);
             emailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new OperationException(HttpStatus.REQUEST_TIMEOUT, "Email has not been sent");
+            throw new OperationException(HttpStatus.REQUEST_TIMEOUT, "E-mail nie został wysłanu");
         }
     }
 
     @Override
     public void constructRegistrationEmail(String contextPath, String token, User user) throws OperationException {
         String recipientAddress = user.getEmail();
-        String subject = "Registration confirmation";
+        String subject = "Potwierdzenie rejestracji";
         final String confirmationUrl
                 = contextPath + ":3000/registration/confirm?token=" + token;
-        final String message = "\nTo enable your account click in the link:\n" +
-                "<a href=" + confirmationUrl + ">Account confirmation</a>";
+        final String message = "\nKliknij na link w celu aktywacji konta:\n" +
+                "<a href=" + confirmationUrl + ">Aktywuj konto</a>";
 
         sendSimpleMessage(recipientAddress, subject, message);
     }

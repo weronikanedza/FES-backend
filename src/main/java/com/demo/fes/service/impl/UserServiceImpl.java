@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl extends AbstractGenericService<User, Long> implements UserService {
+public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private UserDataRepository userDataRepository;
     private EmailService emailService;

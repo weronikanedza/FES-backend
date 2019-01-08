@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Service
-public class RegistrationServiceImpl extends AbstractGenericService<UserData, Long> implements RegistrationService {
+public class RegistrationServiceImpl  implements RegistrationService {
     private UserRepository userRepository;
     private VerificationTokenRepository tokenRepository;
     private EmailService emailService;
@@ -39,7 +39,7 @@ public class RegistrationServiceImpl extends AbstractGenericService<UserData, Lo
 
     @Override
     public UserData registerUser(UserData userData) throws OperationException {
-        // checkIfUserExists(userData);
+        checkIfUserExists(userData);
         return userDataRepository.save(userData);
     }
 
@@ -83,5 +83,7 @@ public class RegistrationServiceImpl extends AbstractGenericService<UserData, Lo
         }
     }
 
-
+    private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + request.getContextPath();
+    }
 }
